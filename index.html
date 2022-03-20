@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>导航页</title>
+    <link href="static/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="static/bootstrap.bundle.js" crossorigin="anonymous"></script>
+    <style>
+        .title-top {
+            text-align: center;
+        }
+
+        .left-layout {
+            float: left;
+            width: 70%;
+        }
+
+        .right-layout {
+            float: right;
+            width: 30%;
+        }
+
+        /*整个网页添加背景图片*/
+        body {
+            background: url(./img/background-body.jpg) no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            background-color: #CCCCCC;
+        }
+
+
+    </style>
+</head>
+<body>
+<!--页面左边搜索引擎部分-->
+<div>
+    <!--切换搜索源-->
+    <div>
+        <label for="type-baidu">默认</label>
+        <label for="type-xueshu">学术</label>
+        <label for="type-yinshi">影视</label>
+        <label for="type-yinle">音乐</label>
+        <label for="type-gongju">工具</label>
+        <label for="type-tupian">图片</label>
+        <label for="type-shequ">社区</label>
+        <label for="type-sucai">素材</label>
+        <label for="type-shenghuo">生活</label>
+    </div>
+    <!--搜索框-->
+    <div>
+        <form action="https://baidu.com/s" method="GET">
+            <div>
+                <!--                <input name="wd">-->
+                <input type="text" class="form-control" placeholder="搜索一下" style="width: 400px">
+                <button type="submit" class="btn btn-primary">搜索</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--页面右边弹出式书签-->
+<div class="right-layout">
+    <h3 class="title-top">快捷书签按钮</h3>
+</div>
+</body>
+</html>
+
+
