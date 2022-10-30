@@ -1,12 +1,12 @@
 <template>
-  <el-container class="layout-container" style="height: 800px">
+  <el-container class="layout-container">
     <el-aside width="200px">
 
       <el-scrollbar>
-        <el-menu>
+        <el-menu background-color="#bdacac">
           <el-menu-item index="1">
             <el-icon>
-              <Search/>
+              <icon-menu/>
             </el-icon>
             <span>搜索</span>
           </el-menu-item>
@@ -64,7 +64,7 @@
     </el-aside>
 
     <el-container>
-      <el-header style="text-align: right; font-size: 12px">
+      <el-header style="text-align: right; font-size: 14px">
         <div class="toolbar">
           <el-dropdown>
             <el-icon>
@@ -72,9 +72,8 @@
             </el-icon>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>View</el-dropdown-item>
-                <el-dropdown-item>Add</el-dropdown-item>
-                <el-dropdown-item>Delete</el-dropdown-item>
+                <el-dropdown-item>登录</el-dropdown-item>
+                <el-dropdown-item>退出</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -93,26 +92,20 @@
 
 <script setup>
 import {ref} from 'vue'
-import {Menu as IconMenu, User, Search} from '@element-plus/icons-vue'
-
-const item = {
-  date: '2016-05-02',
-  name: 'Tom',
-  address: 'No. 189, Grove St, Los Angeles',
-}
-const tableData = ref(Array.from({length: 20}).fill(item))
+import {Menu as IconMenu, User} from '@element-plus/icons-vue'
 </script>
 
 <style scoped>
-.layout-container .el-header {
-  position: relative;
-  background-color: var(--el-color-primary-light-7);
-  color: var(--el-text-color-primary);
+.layout-container {
+  height: 800px;
 }
 
 .layout-container .el-aside {
-  color: var(--el-text-color-primary);
-  background: var(--el-color-primary-light-8);
+}
+
+.layout-container .el-header {
+  position: relative;
+  background-color: #BBBBBC;
 }
 
 .layout-container .el-menu {
@@ -120,8 +113,8 @@ const tableData = ref(Array.from({length: 20}).fill(item))
 }
 
 .layout-container .el-main {
+  background-color: #F9F9F9;
   padding: 0;
-  background-color: #ffa6a6;
 }
 
 .layout-container .toolbar {
