@@ -1,24 +1,10 @@
-# geek-nav
+# 极客导航
 
-## Project setup
-```
-npm install
-```
+## 功能
+- 支持本地账户切换
+- 多引擎搜索
+- 网址导航
+- 书签功能
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 技术框架
+- Vue
