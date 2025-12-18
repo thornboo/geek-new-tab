@@ -21,3 +21,8 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Chrome extension
+*.crx
+*.pem
+.spec-workflow
