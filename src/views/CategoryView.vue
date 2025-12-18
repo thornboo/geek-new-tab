@@ -103,7 +103,7 @@ const cancelDelete = () => {
 
       <!-- 添加卡片 -->
       <div
-        class="add-card border border-dashed border-gray-700 hover:border-matrix hover:shadow-matrix rounded-lg p-5 cursor-pointer transition-all flex-center flex-col gap-2 min-h-[140px] group"
+        class="add-card border-2 border-dashed border-gray-600 hover:border-green-500 rounded-lg p-5 cursor-pointer transition-all flex-center flex-col gap-2 min-h-[140px] group bg-black"
         @click="openAddModal"
       >
         <Icon icon="mdi:plus" class="w-5 h-5 text-gray-600 group-hover:text-matrix transition-colors" />

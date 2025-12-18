@@ -32,10 +32,10 @@ export default defineConfig({
     'text-tertiary': 'text-gray-600',
 
     // 终端卡片：黑色背景 + 绿色边框（始终可见）
-    'card-base': 'bg-black border border-matrix-dim/30 rounded-lg hover:border-matrix hover:shadow-matrix transition-all duration-200',
+    'card-base': 'bg-black border border-gray-700 rounded-lg hover:border-matrix transition-all duration-200',
 
     // 按钮 - Matrix 风格
-    'btn-primary': 'bg-matrix text-black px-4 py-2 rounded font-medium hover:bg-matrix-bright hover:shadow-matrix-glow transition-all text-sm',
+    'btn-primary': 'bg-matrix text-black px-4 py-2 rounded border border-matrix font-medium hover:bg-matrix-bright transition-all text-sm',
     'btn-secondary': 'bg-black text-matrix-dim border border-matrix-dark px-4 py-2 rounded hover:text-matrix hover:border-matrix transition-all text-sm',
   },
   theme: {

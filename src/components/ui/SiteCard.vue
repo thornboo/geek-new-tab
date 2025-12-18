@@ -29,13 +29,13 @@ const handleDelete = (e) => {
 
 <template>
   <div
-    class="site-card card-base relative p-5 cursor-pointer group flex flex-col h-full"
+    class="site-card group"
     @click="openSite"
   >
     <!-- 右上角操作按钮 -->
     <div class="action-buttons absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
       <button
-        class="w-7 h-7 rounded bg-black border border-gray-700 hover:border-matrix flex items-center justify-center transition-all text-gray-400 hover:text-matrix hover:shadow-matrix"
+        class="w-7 h-7 rounded bg-black border border-gray-700 hover:border-matrix flex items-center justify-center transition-all text-gray-400 hover:text-matrix"
         title="编辑"
         @click.stop="handleEdit"
       >
@@ -53,7 +53,7 @@ const handleDelete = (e) => {
 
     <!-- 图标 -->
     <div class="mb-4">
-      <div class="w-10 h-10 rounded border border-gray-700 bg-black flex-center group-hover:border-matrix group-hover:shadow-matrix transition-all">
+      <div class="w-10 h-10 rounded border border-gray-700 bg-black flex-center group-hover:border-matrix transition-all">
         <SiteIcon :icon="site.icon" :url="site.url" size="20" class="opacity-80 group-hover:opacity-100 transition-opacity" />
       </div>
     </div>
@@ -73,11 +73,22 @@ const handleDelete = (e) => {
 
 <style scoped>
 .site-card {
-  min-height: 80px;
+  border: 2px solid #4b5563 !important;
+  background-color: #000 !important;
+  border-radius: 8px !important;
+  padding: 20px !important;
+  min-height: 140px !important;
+  position: relative !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  transition: all 0.2s !important;
 }
 
 .site-card:hover {
   transform: translateY(-2px);
+  border-color: #10b981 !important;
 }
 
 .line-clamp-2 {
