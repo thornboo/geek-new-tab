@@ -1,6 +1,6 @@
 # Geek New Tab
 
-极客导航 - 程序员的新标签页 Chrome 插件
+极客导航 - 程序员的导航网站
 
 ## 技术栈
 
@@ -8,7 +8,6 @@
 - Vite 5
 - UnoCSS (原子化 CSS)
 - @iconify/vue (图标)
-- @crxjs/vite-plugin (Chrome 插件构建)
 
 ## 开发
 
@@ -23,13 +22,19 @@ npm run dev
 npm run build
 ```
 
-## 加载插件到 Chrome
+## 页面说明（非 SPA / 多页面网站）
 
-1. 运行 `npm run build` 构建项目
-2. 打开 Chrome，访问 `chrome://extensions/`
-3. 开启右上角「开发者模式」
-4. 点击「加载已解压的扩展程序」
-5. 选择项目的 `dist` 目录
+- 首页：`/`（默认展示“搜索”分类）
+- 分类页：`/category/search/`（每个分类都有独立静态页面）
+- 设置页：`/settings/`
+- 数据页：`/data/`
+- 关于页：`/about/`
+
+兼容旧地址（会自动跳转）：
+- 分类页：`/category.html?id=search`
+- 设置页：`/settings.html`
+- 数据页：`/data.html`
+- 关于页：`/about.html`
 
 ## 功能规划
 
@@ -44,14 +49,13 @@ npm run build
 
 ```
 src/
-├── manifest.json          # Chrome 插件配置
 ├── assets/                # 静态资源
-│   └── icons/             # 插件图标
-└── newtab/                # 新标签页
-    ├── index.html
-    ├── main.js
-    ├── App.vue
-    ├── components/        # 组件
-    ├── composables/       # 组合式函数
-    └── styles/            # 样式
+│   └── icons/             # 图标资源
+├── components/            # 组件（layout/ui/modals）
+├── composables/           # 组合式函数（状态/业务）
+├── data/                  # 静态数据
+├── entries/               # 多页面入口（每个 HTML 对应一个入口）
+├── pages/                 # 页面装配（布局 + 视图）
+├── styles/                # 全局样式
+└── views/                 # 视图（页面主体）
 ```
