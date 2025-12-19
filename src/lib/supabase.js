@@ -1,40 +1,51 @@
-import { createClient } from '@supabase/supabase-js'
+import { loadSettingsFromStorage } from '@/lib/settingsStorage'
 
-const SETTINGS_KEY = 'geek-nav-settings'
+let supabaseClient = null
+let supabaseInitPromise = null
 
-// 从 localStorage 获取配置
-const getConfig = () => {
-  try {
-    const stored = localStorage.getItem(SETTINGS_KEY)
-    if (stored) {
-      const settings = JSON.parse(stored)
-      if (settings.supabase?.enabled && settings.supabase?.url && settings.supabase?.key) {
-        return {
-          url: settings.supabase.url,
-          key: settings.supabase.key
-        }
-      }
-    }
-  } catch (e) {
-    console.error('Failed to load supabase config:', e)
+const readSupabaseConfig = () => {
+  const settings = loadSettingsFromStorage()
+  const supabaseSettings = settings?.supabase
+  if (supabaseSettings?.enabled && supabaseSettings?.url && supabaseSettings?.key) {
+    return { url: supabaseSettings.url, key: supabaseSettings.key }
   }
   return null
 }
 
-// 创建 Supabase 客户端
-let supabaseClient = null
+// 检查是否已配置（仅判断配置是否存在，不强制加载 SDK）
+export const isConfigured = () => !!readSupabaseConfig()
 
-const config = getConfig()
-if (config) {
-  supabaseClient = createClient(config.url, config.key)
+// 获取（懒加载）Supabase 客户端：仅在已配置时才会加载 SDK 并创建实例
+export const getSupabaseClient = async () => {
+  const config = readSupabaseConfig()
+  if (!config) {
+    supabaseClient = null
+    supabaseInitPromise = null
+    return null
+  }
+
+  if (supabaseClient) return supabaseClient
+
+  if (!supabaseInitPromise) {
+    supabaseInitPromise = (async () => {
+      const { createClient } = await import('@supabase/supabase-js')
+      return createClient(config.url, config.key)
+    })()
+      .then((client) => {
+        supabaseClient = client
+        return client
+      })
+      .catch((e) => {
+        supabaseInitPromise = null
+        throw e
+      })
+  }
+
+  return supabaseInitPromise
 }
 
-export const supabase = supabaseClient
-
-// 检查是否已配置
-export const isConfigured = () => !!supabaseClient
-
 // 动态创建客户端（用于测试连接）
-export const createSupabaseClient = (url, key) => {
+export const createSupabaseClient = async (url, key) => {
+  const { createClient } = await import('@supabase/supabase-js')
   return createClient(url, key)
 }

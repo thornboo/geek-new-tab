@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { useSettings } from '@/composables/useSettings'
-import { createClient } from '@supabase/supabase-js'
+import { createSupabaseClient } from '@/lib/supabase'
 
 const { settings, updateSupabaseConfig, clearSupabaseConfig, setTheme, setLayout } = useSettings()
 
@@ -27,7 +27,7 @@ const testConnection = async () => {
   testMessage.value = '测试中...'
 
   try {
-    const client = createClient(supabaseUrl.value, supabaseKey.value)
+    const client = await createSupabaseClient(supabaseUrl.value, supabaseKey.value)
     const { error } = await client.from('sites').select('id').limit(1)
 
     if (error) {

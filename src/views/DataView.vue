@@ -11,8 +11,8 @@ const importMessage = ref('')
 const showClearModal = ref(false)
 
 // 导出数据
-const handleExport = () => {
-  const data = exportData()
+const handleExport = async () => {
+  const data = await exportData()
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -71,7 +71,7 @@ const handleClear = async () => {
           <div class="flex-1">
             <h3 class="text-base font-medium text-white mb-1">Export Data</h3>
             <p class="text-sm text-gray-500 mb-4">
-              Download all your custom sites and settings as a JSON file.
+              Download all your custom sites as a JSON file.
             </p>
             <button class="btn-secondary" @click="handleExport">
               <Icon icon="mdi:download" class="w-4 h-4 mr-2" />

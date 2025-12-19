@@ -1,11 +1,12 @@
 import { ref } from 'vue'
 import { categories } from '@/data/sites'
-import { supabase, isConfigured } from '@/lib/supabase'
+import { getSupabaseClient, isConfigured } from '@/lib/supabase'
 
 // 用户自定义网站数据（按分类存储）
 const customSites = ref({})
 const loading = ref(false)
 const initialized = ref(false)
+let initPromise = null
 
 /**
  * 从 Supabase 加载自定义网站
@@ -19,7 +20,13 @@ const loadCustomSites = async () => {
 
   loading.value = true
   try {
-    const { data, error } = await supabase
+    const client = await getSupabaseClient()
+    if (!client) {
+      initialized.value = true
+      return
+    }
+
+    const { data, error } = await client
       .from('sites')
       .select('*')
       .order('created_at', { ascending: true })
@@ -53,13 +60,22 @@ const loadCustomSites = async () => {
   }
 }
 
-// 初始化加载
-loadCustomSites()
+const ensureInitialized = () => {
+  if (initialized.value) return Promise.resolve()
+  if (!initPromise) {
+    initPromise = loadCustomSites().finally(() => {
+      initPromise = null
+    })
+  }
+  return initPromise
+}
 
 /**
  * 网站管理 composable
  */
 export function useSiteManager() {
+  void ensureInitialized()
+
   /**
    * 获取指定分类的所有网站（默认 + 自定义）
    */
@@ -80,7 +96,10 @@ export function useSiteManager() {
     }
 
     try {
-      const { data, error } = await supabase
+      const client = await getSupabaseClient()
+      if (!client) return null
+
+      const { data, error } = await client
         .from('sites')
         .insert({
           category: categoryKey,
@@ -127,7 +146,10 @@ export function useSiteManager() {
     }
 
     try {
-      const { error } = await supabase
+      const client = await getSupabaseClient()
+      if (!client) return false
+
+      const { error } = await client
         .from('sites')
         .update({
           name: updates.name,
@@ -171,7 +193,10 @@ export function useSiteManager() {
     }
 
     try {
-      const { error } = await supabase
+      const client = await getSupabaseClient()
+      if (!client) return false
+
+      const { error } = await client
         .from('sites')
         .delete()
         .eq('id', siteId)
@@ -208,7 +233,7 @@ export function useSiteManager() {
    */
   const refresh = async () => {
     initialized.value = false
-    await loadCustomSites()
+    await ensureInitialized()
   }
 
   /**
@@ -219,7 +244,8 @@ export function useSiteManager() {
   /**
    * 导出所有自定义数据
    */
-  const exportData = () => {
+  const exportData = async () => {
+    await ensureInitialized()
     return {
       version: '1.0.0',
       exportedAt: new Date().toISOString(),
@@ -239,10 +265,15 @@ export function useSiteManager() {
       throw new Error('请先配置 Supabase 以启用云同步')
     }
 
+    const client = await getSupabaseClient()
+    if (!client) {
+      throw new Error('请先配置 Supabase 以启用云同步')
+    }
+
     // 逐个添加导入的网站
     for (const [categoryKey, sites] of Object.entries(data.customSites)) {
       for (const site of sites) {
-        await supabase
+        await client
           .from('sites')
           .insert({
             category: categoryKey,
@@ -268,7 +299,13 @@ export function useSiteManager() {
     }
 
     try {
-      const { error } = await supabase
+      const client = await getSupabaseClient()
+      if (!client) {
+        customSites.value = {}
+        return
+      }
+
+      const { error } = await client
         .from('sites')
         .delete()
         .neq('id', 0) // 删除所有记录

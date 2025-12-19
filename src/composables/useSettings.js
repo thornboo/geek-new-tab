@@ -1,45 +1,12 @@
 import { ref, watch } from 'vue'
-
-const SETTINGS_KEY = 'geek-nav-settings'
-
-// 默认设置
-const defaultSettings = {
-  // 数据同步配置
-  supabase: {
-    url: '',
-    key: '',
-    enabled: false
-  },
-  // 外观配置
-  appearance: {
-    theme: 'dark', // dark, light, system
-    layout: 'grid' // grid, list
-  }
-}
-
-// 从 localStorage 加载设置
-const loadSettings = () => {
-  try {
-    const stored = localStorage.getItem(SETTINGS_KEY)
-    if (stored) {
-      return { ...defaultSettings, ...JSON.parse(stored) }
-    }
-  } catch (e) {
-    console.error('Failed to load settings:', e)
-  }
-  return { ...defaultSettings }
-}
+import { loadSettingsFromStorage, saveSettingsToStorage } from '@/lib/settingsStorage'
 
 // 全局设置状态
-const settings = ref(loadSettings())
+const settings = ref(loadSettingsFromStorage())
 
 // 监听变化自动保存
 watch(settings, (newSettings) => {
-  try {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(newSettings))
-  } catch (e) {
-    console.error('Failed to save settings:', e)
-  }
+  saveSettingsToStorage(newSettings)
 }, { deep: true })
 
 /**
