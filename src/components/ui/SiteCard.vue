@@ -70,31 +70,3 @@ const handleDelete = (e) => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.site-card {
-  border: 2px solid #4b5563 !important;
-  background-color: #000 !important;
-  border-radius: 8px !important;
-  padding: 20px !important;
-  min-height: 140px !important;
-  position: relative !important;
-  cursor: pointer !important;
-  display: flex !important;
-  flex-direction: column !important;
-  height: 100% !important;
-  transition: all 0.2s !important;
-}
-
-.site-card:hover {
-  transform: translateY(-2px);
-  border-color: #10b981 !important;
-}
-
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>

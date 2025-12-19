@@ -10,8 +10,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.88.0",
-    "vue": "^3.4.21",
-    "vue-router": "^4.6.4"
+    "vue": "^3.4.21"
   },
   "devDependencies": {
     "@iconify/vue": "^4.1.2",

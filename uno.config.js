@@ -34,6 +34,9 @@ export default defineConfig({
     // 终端卡片：黑色背景 + 绿色边框（始终可见）
     'card-base': 'bg-black border border-gray-700 rounded-lg hover:border-matrix transition-all duration-200',
 
+    // 网站卡片（避免 scoped CSS + !important 覆盖）
+    'site-card': 'bg-black border-2 border-gray-600 rounded-lg p-5 min-h-[140px] relative cursor-pointer flex flex-col h-full transition-all duration-200 hover:(-translate-y-1 border-matrix)',
+
     // 按钮 - Matrix 风格
     'btn-primary': 'bg-matrix text-black px-4 py-2 rounded border border-matrix font-medium hover:bg-matrix-bright transition-all text-sm',
     'btn-secondary': 'bg-black text-matrix-dim border border-matrix-dark px-4 py-2 rounded hover:text-matrix hover:border-matrix transition-all text-sm',
@@ -41,6 +44,7 @@ export default defineConfig({
   theme: {
     colors: {
       // Matrix 色板
+      primary: '#ededed',
       background: '#000000',
       surface: '#0a0a0a',
       matrix: {

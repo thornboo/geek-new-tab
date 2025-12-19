@@ -1,9 +1,4 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import 'virtual:uno.css'
-import './styles/main.css'
+import HomePage from '@/pages/HomePage.vue'
+import { mountPage } from '@/entries/bootstrap'
 
-createApp(App)
-  .use(router)
-  .mount('#app')
+mountPage(HomePage)

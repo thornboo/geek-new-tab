@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>分类 - 极客导航</title>
+</head>
+<body>
+  <script>
+    const params = new URLSearchParams(window.location.search)
+    const id = params.get('id') || 'search'
+    const target = new URL(`./category/${encodeURIComponent(id)}/`, window.location.href)
+    window.location.replace(target.toString())
+  </script>
+  <noscript>
+    请启用 JavaScript，或直接访问：<a href="./category/search/">./category/search/</a>
+  </noscript>
+</body>
+</html>

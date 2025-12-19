@@ -1,125 +1,124 @@
 <script setup>
-import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import { getMenuItems } from '@/data/sites'
 
-const route = useRoute()
-const router = useRouter()
+const props = defineProps({
+  activeCategory: { type: String, default: '' },
+  activePage: { type: String, default: 'category' } // category | settings | data | about
+})
+
+const emit = defineEmits(['navigate-category'])
 
 // 菜单项
-const menuItems = computed(() => getMenuItems())
+const menuItems = getMenuItems()
 
-// 当前激活的分类
-const activeCategory = computed(() => route.params.id || '')
-
-// 导航到分类
-const navigateToCategory = (key) => {
-  router.push({ name: 'Category', params: { id: key } })
+const handleCategoryClick = (event, key) => {
+  if (props.activePage !== 'category') return
+  if (event.defaultPrevented) return
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
+  event.preventDefault()
+  if (key === props.activeCategory) return
+  emit('navigate-category', key)
 }
-
-// 检查是否为特定页面
-const isSettingsPage = computed(() => route.name === 'Settings')
-const isDataPage = computed(() => route.name === 'Data')
-const isAboutPage = computed(() => route.name === 'About')
 </script>
 
 <template>
-  <aside class="sidebar w-64 h-full bg-black layout-border flex flex-col pt-6 pb-4">
+  <aside class="sidebar w-64 h-full bg-black layout-border flex flex-col pt-6 pb-4 overflow-y-auto">
     <!-- Logo -->
-    <router-link to="/" class="px-6 mb-8 flex items-center gap-3 no-underline group">
+    <a href="/" class="px-6 mb-8 flex items-center gap-3 no-underline group">
       <div class="w-8 h-8 rounded border border-gray-700 bg-black flex-center group-hover:border-matrix group-hover:shadow-matrix transition-all">
         <Icon icon="mdi:matrix" class="w-5 h-5 text-matrix" />
       </div>
       <span class="font-bold text-lg tracking-tight text-white">GeekTab</span>
-    </router-link>
+    </a>
 
     <!-- 菜单列表 -->
     <nav class="menu flex-1 flex flex-col gap-1 px-3">
       <div class="px-3 mb-2 text-xs text-gray-600 uppercase tracking-wider">Navigation</div>
 
-      <div
+      <a
         v-for="item in menuItems"
         :key="item.key"
+        :href="`/category/${encodeURIComponent(item.key)}/`"
         class="menu-item flex items-center px-3 py-2 rounded cursor-pointer transition-all duration-200"
-        :class="activeCategory === item.key
+        :class="props.activeCategory === item.key
           ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
           : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'"
-        @click="navigateToCategory(item.key)"
+        @click="handleCategoryClick($event, item.key)"
       >
         <Icon
           :icon="item.icon"
           class="w-4 h-4 mr-3"
-          :class="activeCategory === item.key ? 'text-matrix' : 'text-gray-600'"
+          :class="props.activeCategory === item.key ? 'text-matrix' : 'text-gray-600'"
         />
         <span class="text-sm">{{ item.label }}</span>
-      </div>
+      </a>
     </nav>
 
     <!-- 底部导航 -->
     <div class="footer px-3 mt-auto border-t border-gray-800 pt-3 space-y-1">
       <!-- 数据管理 -->
-      <router-link
-        to="/data"
+      <a
+        href="/data/"
         class="w-full flex items-center px-3 py-2 rounded transition-all group no-underline"
-        :class="isDataPage
+        :class="props.activePage === 'data'
           ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
           : 'bg-transparent hover:bg-white/5 border-l-2 border-transparent'"
       >
         <Icon
           icon="mdi:database"
           class="w-4 h-4 mr-3 transition-colors"
-          :class="isDataPage ? 'text-matrix' : 'text-gray-600 group-hover:text-white'"
+          :class="props.activePage === 'data' ? 'text-matrix' : 'text-gray-600 group-hover:text-white'"
         />
         <span
           class="text-sm"
-          :class="isDataPage ? 'text-matrix' : 'text-gray-400 group-hover:text-white'"
+          :class="props.activePage === 'data' ? 'text-matrix' : 'text-gray-400 group-hover:text-white'"
         >
           Data
         </span>
-      </router-link>
+      </a>
 
       <!-- 设置 -->
-      <router-link
-        to="/settings"
+      <a
+        href="/settings/"
         class="w-full flex items-center px-3 py-2 rounded transition-all group no-underline"
-        :class="isSettingsPage
+        :class="props.activePage === 'settings'
           ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
           : 'bg-transparent hover:bg-white/5 border-l-2 border-transparent'"
       >
         <Icon
           icon="mdi:cog"
           class="w-4 h-4 mr-3 transition-colors"
-          :class="isSettingsPage ? 'text-matrix' : 'text-gray-600 group-hover:text-white'"
+          :class="props.activePage === 'settings' ? 'text-matrix' : 'text-gray-600 group-hover:text-white'"
         />
         <span
           class="text-sm"
-          :class="isSettingsPage ? 'text-matrix' : 'text-gray-400 group-hover:text-white'"
+          :class="props.activePage === 'settings' ? 'text-matrix' : 'text-gray-400 group-hover:text-white'"
         >
           Settings
         </span>
-      </router-link>
+      </a>
 
       <!-- 关于 -->
-      <router-link
-        to="/about"
+      <a
+        href="/about/"
         class="w-full flex items-center px-3 py-2 rounded transition-all group no-underline"
-        :class="isAboutPage
+        :class="props.activePage === 'about'
           ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
           : 'bg-transparent hover:bg-white/5 border-l-2 border-transparent'"
       >
         <Icon
           icon="mdi:information"
           class="w-4 h-4 mr-3 transition-colors"
-          :class="isAboutPage ? 'text-matrix' : 'text-gray-600 group-hover:text-white'"
+          :class="props.activePage === 'about' ? 'text-matrix' : 'text-gray-600 group-hover:text-white'"
         />
         <span
           class="text-sm"
-          :class="isAboutPage ? 'text-matrix' : 'text-gray-400 group-hover:text-white'"
+          :class="props.activePage === 'about' ? 'text-matrix' : 'text-gray-400 group-hover:text-white'"
         >
           About
         </span>
-      </router-link>
+      </a>
     </div>
   </aside>
 </template>

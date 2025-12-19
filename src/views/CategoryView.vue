@@ -1,6 +1,5 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import SiteCard from '@/components/ui/SiteCard.vue'
 import SiteFormModal from '@/components/modals/SiteFormModal.vue'
@@ -8,12 +7,15 @@ import ConfirmModal from '@/components/modals/ConfirmModal.vue'
 import { getCategoryByKey } from '@/data/sites'
 import { useSiteManager } from '@/composables/useSiteManager'
 
-const route = useRoute()
+const props = defineProps({
+  categoryKey: { type: String, required: true }
+})
+
 const { getSitesByCategory, addSite, updateSite, deleteSite } = useSiteManager()
 
 // 当前分类
-const currentCategory = computed(() => getCategoryByKey(route.params.id))
-const currentSites = computed(() => getSitesByCategory(route.params.id))
+const currentCategory = computed(() => getCategoryByKey(props.categoryKey))
+const currentSites = computed(() => getSitesByCategory(props.categoryKey))
 
 // 模态框状态
 const showFormModal = ref(false)
@@ -42,9 +44,9 @@ const closeFormModal = () => {
 // 提交表单
 const handleFormSubmit = async (formData) => {
   if (formData.id && editingSite.value?.isCustom) {
-    await updateSite(route.params.id, formData.id, formData)
+    await updateSite(props.categoryKey, formData.id, formData)
   } else {
-    await addSite(route.params.id, {
+    await addSite(props.categoryKey, {
       name: formData.name,
       url: formData.url,
       desc: formData.desc
@@ -60,7 +62,7 @@ const openDeleteModal = (site) => {
 
 const confirmDelete = async () => {
   if (deletingSite.value) {
-    await deleteSite(route.params.id, deletingSite.value.id)
+    await deleteSite(props.categoryKey, deletingSite.value.id)
   }
   showDeleteModal.value = false
   deletingSite.value = null
