@@ -14,7 +14,9 @@ const handleToggle = () => {
 </script>
 
 <template>
-  <header class="header h-14 flex items-center px-4 md:px-8 bg-black/80 backdrop-blur-sm border-b border-gray-800 sticky top-0 z-40 gap-4">
+  <header
+    class="header h-14 flex items-center px-4 md:px-8 bg-black/80 backdrop-blur-sm border-b border-gray-800 sticky top-0 z-40 gap-4"
+  >
     <button
       v-if="props.showSidebarToggle"
       class="lg:hidden w-10 h-10 border border-gray-700 rounded flex items-center justify-center text-gray-400 hover:text-white hover:border-matrix transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-matrix"

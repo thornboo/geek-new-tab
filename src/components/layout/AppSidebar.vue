@@ -26,7 +26,9 @@ const handleCategoryClick = (event, key) => {
   <aside class="sidebar w-64 h-full bg-black layout-border flex flex-col pt-6 pb-4 overflow-y-auto">
     <!-- Logo -->
     <a href="/" class="px-6 mb-8 flex items-center gap-3 no-underline group">
-      <div class="w-8 h-8 rounded border border-gray-700 bg-black flex-center group-hover:border-matrix group-hover:shadow-matrix transition-all">
+      <div
+        class="w-8 h-8 rounded border border-gray-700 bg-black flex-center group-hover:border-matrix group-hover:shadow-matrix transition-all"
+      >
         <Icon icon="mdi:matrix" class="w-5 h-5 text-matrix" />
       </div>
       <span class="font-bold text-lg tracking-tight text-white">GeekTab</span>
@@ -41,9 +43,11 @@ const handleCategoryClick = (event, key) => {
         :key="item.key"
         :href="`/category/${encodeURIComponent(item.key)}/`"
         class="menu-item flex items-center px-3 py-2 rounded cursor-pointer transition-all duration-200"
-        :class="props.activeCategory === item.key
-          ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
-          : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'"
+        :class="
+          props.activeCategory === item.key
+            ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
+            : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'
+        "
         @click="handleCategoryClick($event, item.key)"
       >
         <Icon
@@ -61,18 +65,24 @@ const handleCategoryClick = (event, key) => {
       <a
         href="/data/"
         class="w-full flex items-center px-3 py-2 rounded transition-all group no-underline"
-        :class="props.activePage === 'data'
-          ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
-          : 'bg-transparent hover:bg-white/5 border-l-2 border-transparent'"
+        :class="
+          props.activePage === 'data'
+            ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
+            : 'bg-transparent hover:bg-white/5 border-l-2 border-transparent'
+        "
       >
         <Icon
           icon="mdi:database"
           class="w-4 h-4 mr-3 transition-colors"
-          :class="props.activePage === 'data' ? 'text-matrix' : 'text-gray-600 group-hover:text-white'"
+          :class="
+            props.activePage === 'data' ? 'text-matrix' : 'text-gray-600 group-hover:text-white'
+          "
         />
         <span
           class="text-sm"
-          :class="props.activePage === 'data' ? 'text-matrix' : 'text-gray-400 group-hover:text-white'"
+          :class="
+            props.activePage === 'data' ? 'text-matrix' : 'text-gray-400 group-hover:text-white'
+          "
         >
           Data
         </span>
@@ -82,18 +92,24 @@ const handleCategoryClick = (event, key) => {
       <a
         href="/settings/"
         class="w-full flex items-center px-3 py-2 rounded transition-all group no-underline"
-        :class="props.activePage === 'settings'
-          ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
-          : 'bg-transparent hover:bg-white/5 border-l-2 border-transparent'"
+        :class="
+          props.activePage === 'settings'
+            ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
+            : 'bg-transparent hover:bg-white/5 border-l-2 border-transparent'
+        "
       >
         <Icon
           icon="mdi:cog"
           class="w-4 h-4 mr-3 transition-colors"
-          :class="props.activePage === 'settings' ? 'text-matrix' : 'text-gray-600 group-hover:text-white'"
+          :class="
+            props.activePage === 'settings' ? 'text-matrix' : 'text-gray-600 group-hover:text-white'
+          "
         />
         <span
           class="text-sm"
-          :class="props.activePage === 'settings' ? 'text-matrix' : 'text-gray-400 group-hover:text-white'"
+          :class="
+            props.activePage === 'settings' ? 'text-matrix' : 'text-gray-400 group-hover:text-white'
+          "
         >
           Settings
         </span>
@@ -103,18 +119,24 @@ const handleCategoryClick = (event, key) => {
       <a
         href="/about/"
         class="w-full flex items-center px-3 py-2 rounded transition-all group no-underline"
-        :class="props.activePage === 'about'
-          ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
-          : 'bg-transparent hover:bg-white/5 border-l-2 border-transparent'"
+        :class="
+          props.activePage === 'about'
+            ? 'bg-matrix/10 text-matrix border-l-2 border-matrix'
+            : 'bg-transparent hover:bg-white/5 border-l-2 border-transparent'
+        "
       >
         <Icon
           icon="mdi:information"
           class="w-4 h-4 mr-3 transition-colors"
-          :class="props.activePage === 'about' ? 'text-matrix' : 'text-gray-600 group-hover:text-white'"
+          :class="
+            props.activePage === 'about' ? 'text-matrix' : 'text-gray-600 group-hover:text-white'
+          "
         />
         <span
           class="text-sm"
-          :class="props.activePage === 'about' ? 'text-matrix' : 'text-gray-400 group-hover:text-white'"
+          :class="
+            props.activePage === 'about' ? 'text-matrix' : 'text-gray-400 group-hover:text-white'
+          "
         >
           About
         </span>

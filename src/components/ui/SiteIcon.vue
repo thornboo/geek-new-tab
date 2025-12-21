@@ -41,7 +41,7 @@ const faviconSources = computed(() => {
     // Google（备用）
     `https://www.google.com/s2/favicons?domain=${domain.value}&sz=64`,
     // Favicon.im
-    `https://favicon.im/${domain.value}`,
+    `https://favicon.im/${domain.value}`
   ]
 })
 
@@ -86,29 +86,25 @@ const initial = computed(() => {
 })
 
 // 重置状态当 props 变化时
-watch(() => props.url, () => {
-  faviconLoaded.value = false
-  faviconError.value = false
-  currentFaviconIndex.value = 0
-})
+watch(
+  () => props.url,
+  () => {
+    faviconLoaded.value = false
+    faviconError.value = false
+    currentFaviconIndex.value = 0
+  }
+)
 </script>
 
 <template>
   <div class="site-icon" :style="{ width: `${size}px`, height: `${size}px` }">
     <!-- 优先使用 Iconify 图标 -->
-    <Icon
-      v-if="shouldUseIconify"
-      :icon="icon"
-      class="w-full h-full"
-    />
+    <Icon v-if="shouldUseIconify" :icon="icon" class="w-full h-full" />
 
     <!-- 使用 Favicon -->
     <template v-else-if="shouldUseFavicon">
       <!-- 加载中显示骨架 -->
-      <div
-        v-if="!faviconLoaded"
-        class="skeleton w-full h-full rounded bg-gray-200 animate-pulse"
-      />
+      <div v-if="!faviconLoaded" class="skeleton w-full h-full rounded bg-gray-200 animate-pulse" />
       <!-- Favicon 图片 -->
       <img
         :key="currentFaviconUrl"

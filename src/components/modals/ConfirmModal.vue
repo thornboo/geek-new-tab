@@ -21,7 +21,9 @@ const emit = defineEmits(['confirm', 'cancel'])
         class="modal-overlay fixed inset-0 bg-black/90 flex-center z-50 backdrop-blur-sm"
         @click.self="emit('cancel')"
       >
-        <div class="modal-content bg-black border border-gray-700 shadow-matrix rounded-lg w-full max-w-sm mx-4 overflow-hidden">
+        <div
+          class="modal-content bg-black border border-gray-700 shadow-matrix rounded-lg w-full max-w-sm mx-4 overflow-hidden"
+        >
           <div class="p-6 text-center">
             <div class="w-12 h-12 rounded border border-gray-700 bg-black flex-center mx-auto mb-4">
               <Icon icon="mdi:alert-circle" class="w-6 h-6 text-matrix" />
@@ -51,16 +53,22 @@ const emit = defineEmits(['confirm', 'cancel'])
 </template>
 
 <style scoped>
-.modal-enter-active, .modal-leave-active {
+.modal-enter-active,
+.modal-leave-active {
   transition: opacity 0.2s;
 }
-.modal-enter-active .modal-content, .modal-leave-active .modal-content {
-  transition: transform 0.2s, opacity 0.2s;
+.modal-enter-active .modal-content,
+.modal-leave-active .modal-content {
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
 }
-.modal-enter-from, .modal-leave-to {
+.modal-enter-from,
+.modal-leave-to {
   opacity: 0;
 }
-.modal-enter-from .modal-content, .modal-leave-to .modal-content {
+.modal-enter-from .modal-content,
+.modal-leave-to .modal-content {
   transform: scale(0.95);
   opacity: 0;
 }

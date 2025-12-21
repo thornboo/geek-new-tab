@@ -6,16 +6,42 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint src --ext .js,.vue",
+    "lint:fix": "eslint src --ext .js,.vue --fix",
+    "format": "prettier --write \"src/**/*.{js,vue,json,css}\"",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "type-check": "vue-tsc --noEmit",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,vue}": ["eslint --fix", "prettier --write"],
+    "*.{json,css}": ["prettier --write"]
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.88.0",
     "vue": "^3.4.21"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@iconify/vue": "^4.1.2",
+    "@types/node": "^25.0.3",
     "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-vue": "^10.6.2",
+    "happy-dom": "^20.0.11",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3",
     "unocss": "^0.58.5",
-    "vite": "^5.1.6"
+    "vite": "^5.1.6",
+    "vitest": "^4.0.16",
+    "vue-tsc": "^3.1.8"
   }
 }

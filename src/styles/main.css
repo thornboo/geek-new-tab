@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Share+Tech+Mono&display=swap');
 
 /* Reset default borders so UnoCSS utilities render full outlines */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -10,7 +12,9 @@
   border-color: #003b00;
 }
 
-html, body, #app {
+html,
+body,
+#app {
   width: 100%;
   min-height: 100%;
 }
@@ -55,23 +59,27 @@ body {
   box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
   outline: none;
   box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
 }
 
-input:focus-visible, textarea:focus-visible {
+input:focus-visible,
+textarea:focus-visible {
   outline: 2px solid rgba(0, 255, 65, 0.7);
   outline-offset: 2px;
 }
 
 /* 输入框 Matrix 风格 */
-input, textarea {
+input,
+textarea {
   font-family: 'JetBrains Mono', monospace;
   caret-color: #00ff41;
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: #1b7a1b;
 }
 
@@ -106,8 +114,14 @@ a:focus-visible {
 
 /* 终端光标闪烁动画 */
 @keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .cursor-blink::after {
@@ -117,12 +131,16 @@ a:focus-visible {
 
 /* Matrix 发光文字效果 */
 .text-glow {
-  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5), 0 0 20px rgba(0, 255, 65, 0.3);
+  text-shadow:
+    0 0 10px rgba(0, 255, 65, 0.5),
+    0 0 20px rgba(0, 255, 65, 0.3);
 }
 
 /* 边框发光效果 */
 .border-glow {
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3), inset 0 0 10px rgba(0, 255, 65, 0.1);
+  box-shadow:
+    0 0 10px rgba(0, 255, 65, 0.3),
+    inset 0 0 10px rgba(0, 255, 65, 0.1);
 }
 
 .font-mono {

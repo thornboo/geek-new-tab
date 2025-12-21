@@ -18,10 +18,6 @@ export default defineConfig({
     rollupOptions: {
       input: Object.fromEntries([
         ['index', resolve(__dirname, 'index.html')],
-        ['category-legacy', resolve(__dirname, 'category.html')],
-        ['settings-legacy', resolve(__dirname, 'settings.html')],
-        ['data-legacy', resolve(__dirname, 'data.html')],
-        ['about-legacy', resolve(__dirname, 'about.html')],
         ['category', resolve(__dirname, 'category/index.html')],
         ['settings', resolve(__dirname, 'settings/index.html')],
         ['data', resolve(__dirname, 'data/index.html')],

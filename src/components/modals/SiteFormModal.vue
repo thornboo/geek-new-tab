@@ -14,24 +14,28 @@ const form = ref({ name: '', url: '', desc: '' })
 const errors = ref({})
 
 const isEdit = computed(() => !!props.site?.id)
-const title = computed(() => isEdit.value ? '编辑网站' : '添加网站')
+const title = computed(() => (isEdit.value ? '编辑网站' : '添加网站'))
 
 const resetForm = () => {
   form.value = { name: '', url: '', desc: '' }
   errors.value = {}
 }
 
-watch(() => props.site, (newSite) => {
-  if (newSite) {
-    form.value = {
-      name: newSite.name || '',
-      url: newSite.url || '',
-      desc: newSite.desc || ''
+watch(
+  () => props.site,
+  (newSite) => {
+    if (newSite) {
+      form.value = {
+        name: newSite.name || '',
+        url: newSite.url || '',
+        desc: newSite.desc || ''
+      }
+    } else {
+      resetForm()
     }
-  } else {
-    resetForm()
-  }
-}, { immediate: true })
+  },
+  { immediate: true }
+)
 
 const validate = () => {
   errors.value = {}
@@ -71,11 +75,16 @@ const handleClose = () => {
         class="modal-overlay fixed inset-0 bg-black/90 flex-center z-50 backdrop-blur-sm"
         @click.self="handleClose"
       >
-        <div class="modal-content bg-black border border-gray-700 shadow-matrix rounded-lg w-full max-w-md mx-4 overflow-hidden">
+        <div
+          class="modal-content bg-black border border-gray-700 shadow-matrix rounded-lg w-full max-w-md mx-4 overflow-hidden"
+        >
           <!-- 头部 -->
           <div class="modal-header flex-between px-5 py-4 border-b border-gray-800">
             <h3 class="text-base font-medium text-white">{{ title }}</h3>
-            <button class="w-8 h-8 rounded bg-transparent hover:bg-white/10 flex-center transition-colors" @click="handleClose">
+            <button
+              class="w-8 h-8 rounded bg-transparent hover:bg-white/10 flex-center transition-colors"
+              @click="handleClose"
+            >
               <Icon icon="mdi:close" class="w-5 h-5 text-gray-400 hover:text-white" />
             </button>
           </div>
@@ -129,10 +138,7 @@ const handleClose = () => {
             >
               Cancel
             </button>
-            <button
-              class="btn-primary"
-              @click="handleSubmit"
-            >
+            <button class="btn-primary" @click="handleSubmit">
               {{ isEdit ? 'Save Changes' : 'Add Site' }}
             </button>
           </div>
@@ -143,16 +149,22 @@ const handleClose = () => {
 </template>
 
 <style scoped>
-.modal-enter-active, .modal-leave-active {
+.modal-enter-active,
+.modal-leave-active {
   transition: opacity 0.2s;
 }
-.modal-enter-active .modal-content, .modal-leave-active .modal-content {
-  transition: transform 0.2s, opacity 0.2s;
+.modal-enter-active .modal-content,
+.modal-leave-active .modal-content {
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
 }
-.modal-enter-from, .modal-leave-to {
+.modal-enter-from,
+.modal-leave-to {
   opacity: 0;
 }
-.modal-enter-from .modal-content, .modal-leave-to .modal-content {
+.modal-enter-from .modal-content,
+.modal-leave-to .modal-content {
   transform: scale(0.95);
   opacity: 0;
 }
