@@ -93,6 +93,7 @@ CREATE TABLE sites (
   tags TEXT[],                          -- 标签数组 ['代码', '开源']
   visit_count INTEGER DEFAULT 0,        -- 访问次数
   last_visit TIMESTAMPTZ,               -- 最后访问时间
+  sort_order INTEGER DEFAULT 0,         -- 排序权重（手动拖拽）
   is_custom BOOLEAN DEFAULT true,       -- 是否为用户自定义
   created_at TIMESTAMPTZ DEFAULT NOW(), -- 创建时间
   updated_at TIMESTAMPTZ DEFAULT NOW(), -- 更新时间
@@ -101,6 +102,7 @@ CREATE TABLE sites (
 
 -- 创建索引（提升查询性能）
 CREATE INDEX sites_category_idx ON sites(category);
+CREATE INDEX sites_sort_order_idx ON sites(sort_order);
 CREATE INDEX sites_deleted_at_idx ON sites(deleted_at);
 CREATE INDEX sites_updated_at_idx ON sites(updated_at);
 
@@ -166,6 +168,13 @@ CREATE TRIGGER update_user_settings_updated_at
 3. 点击 **New Query**
 4. 复制粘贴上述 SQL 代码
 5. 点击 **Run** 执行
+
+如已创建表，可执行以下迁移：
+
+```sql
+ALTER TABLE sites ADD COLUMN IF NOT EXISTS sort_order INTEGER DEFAULT 0;
+CREATE INDEX IF NOT EXISTS sites_sort_order_idx ON sites(sort_order);
+```
 
 ---
 
@@ -572,8 +581,6 @@ export const useSiteStore = defineStore('site', () => {
 VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
-# 可选：启用云同步的默认值
-VITE_ENABLE_CLOUD_SYNC=false
 ```
 
 ### 2. 添加到 .gitignore
@@ -592,27 +599,16 @@ VITE_ENABLE_CLOUD_SYNC=false
 VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
 
-# 可选配置
-VITE_ENABLE_CLOUD_SYNC=false
 ```
 
 ### 4. 在应用中使用
 
-用户可以在设置页面手动输入 Supabase URL 和 Key，也可以使用环境变量：
+应用仅通过环境变量读取 Supabase 配置：
 
 ```typescript
-// stores/modules/settings.ts
-const defaultSupabaseUrl = import.meta.env.VITE_SUPABASE_URL || ''
-const defaultSupabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
-
-const settings = ref<AppSettings>({
-  supabase: {
-    url: defaultSupabaseUrl,
-    key: defaultSupabaseKey,
-    enabled: false
-  }
-  // ...
-})
+// lib/supabase.ts
+const url = import.meta.env.VITE_SUPABASE_URL
+const key = import.meta.env.VITE_SUPABASE_ANON_KEY
 ```
 
 ---

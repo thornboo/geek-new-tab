@@ -1,6 +1,6 @@
 # Geek New Tab - 架构设计文档
 
-> 从原型设计到生产级 Vue 3 + Tauri 应用的完整架构方案
+> 从原型设计到生产级 Vue 3 Web 应用的完整架构方案
 
 ## 目录
 
@@ -18,7 +18,7 @@
 
 ### 项目定位
 
-Geek New Tab 是一个面向程序员和极客的浏览器新标签页/桌面应用，提供高效的网站导航管理、多引擎搜索、访问统计和云端同步功能。
+Geek New Tab 是一个面向程序员和极客的浏览器新标签页应用，提供高效的网站导航管理、站内搜索、访问统计和云端同步功能。
 
 ### 设计目标
 
@@ -27,7 +27,7 @@ Geek New Tab 是一个面向程序员和极客的浏览器新标签页/桌面应
 - 响应迅速 - 首屏加载 < 1s，交互延迟 < 100ms
 - 数据安全 - 本地优先，可选云端同步
 - 高度定制 - 主题、布局、快捷键自定义
-- 跨平台 - Web 应用 + Tauri 桌面端
+- Web 优先 - 纯浏览器应用
 
 **非目标**
 - 不做复杂的协作功能
@@ -61,10 +61,7 @@ Geek New Tab 是一个面向程序员和极客的浏览器新标签页/桌面应
         }
       ]
     }
-  ],
-  engines: {
-    g: { name: '谷歌', url: 'https://www.google.com/search?q=' }
-  }
+  ]
 }
 
 {
@@ -142,11 +139,10 @@ Geek New Tab 是一个面向程序员和极客的浏览器新标签页/桌面应
 - 用途：云端存储，跨设备同步
 - 优势：开源，PostgreSQL，实时订阅，认证系统
 
-### 桌面端
+### Web 形态
 
-**Tauri**
-- 选择理由：包体积小（3-5MB vs Electron 50-100MB），性能好，安全性高
-- 对比 Electron：使用系统 WebView，Rust 后端，更低的资源占用
+**浏览器应用**
+- 选择理由：无需安装，部署简单，快速迭代
 
 ---
 
@@ -171,10 +167,9 @@ Geek New Tab 是一个面向程序员和极客的浏览器新标签页/桌面应
 │   ├── LocalStorage (本地缓存)
 │   └── Supabase (云端同步)
 │
-└── Tauri Backend (桌面端 - 可选)
-    ├── Window API (窗口控制)
-    ├── File System (文件操作)
-    └── System Tray (系统托盘)
+└── Browser Runtime
+    ├── Web APIs
+    └── LocalStorage
 ```
 
 ### 数据流
@@ -223,8 +218,7 @@ geek-new-tab/
 │   │
 │   ├── lib/                  # 工具库
 │   │   ├── storage.ts
-│   │   ├── supabase.ts
-│   │   └── tauri.ts
+│   │   └── supabase.ts
 │   │
 │   ├── types/                # TypeScript 类型
 │   │   └── index.ts
@@ -233,11 +227,6 @@ geek-new-tab/
 │   │   └── Home.vue
 │   │
 │   └── App.vue
-│
-├── src-tauri/                # Tauri 后端 (可选)
-│   ├── src/
-│   │   └── main.rs
-│   └── tauri.conf.json
 │
 ├── index.html
 ├── vite.config.ts
@@ -297,17 +286,6 @@ geek-new-tab/
 - Tree Shaking：移除未使用代码
 - 懒加载：图片、图标按需加载
 - 防抖节流：搜索输入优化
-
-### 5. Tauri 集成
-
-详见：[tauri-integration.md](./tauri-integration.md)
-
-**原生能力**
-- 窗口控制：最小化/最大化/置顶
-- 系统托盘：快速访问
-- 全局快捷键：Ctrl+Shift+G 唤起
-- 文件系统：配置导入/导出
-- 剪贴板：复制网站链接
 
 ---
 
@@ -392,24 +370,6 @@ geek-new-tab/
 
 ---
 
-### Phase 5: Tauri 桌面化 (Week 7-8)
-
-**目标：** 打包为桌面应用
-
-**任务清单**
-- [ ] 初始化 Tauri 项目
-- [ ] 实现窗口控制
-- [ ] 实现系统托盘
-- [ ] 实现全局快捷键
-- [ ] 实现文件导入/导出
-- [ ] 配置应用图标
-- [ ] 打包测试
-
-**验收标准**
-- Windows/macOS/Linux 可正常运行
-- 包体积 < 10MB
-- 启动速度 < 1s
-
 ---
 
 ## 相关文档
@@ -421,13 +381,11 @@ geek-new-tab/
 - [数据持久化方案](./data-persistence.md)
 - [Supabase 配置指南](./supabase-setup.md)
 - [性能优化策略](./performance.md)
-- [Tauri 集成方案](./tauri-integration.md)
 
 ### 参考资源
 
 - [Vue 3 官方文档](https://vuejs.org/)
 - [Pinia 官方文档](https://pinia.vuejs.org/)
-- [Tauri 官方文档](https://tauri.app/)
 - [Supabase 文档](https://supabase.com/docs)
 - [UnoCSS 文档](https://unocss.dev/)
 

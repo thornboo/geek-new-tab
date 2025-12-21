@@ -12,7 +12,6 @@
 - **[数据持久化方案](./docs/data-persistence.md)** - 本地存储 + 云端同步策略
 - **[Supabase 配置指南](./docs/supabase-setup.md)** - 云数据库完整配置方案
 - **[性能优化策略](./docs/performance.md)** - 全面的性能优化方案
-- **[Tauri 集成方案](./docs/tauri-integration.md)** - 桌面应用集成指南
 
 ---
 
@@ -38,10 +37,6 @@
   - 认证系统
 - **LocalStorage** - 浏览器本地存储
 
-### 桌面端 (规划中)
-
-- **Tauri** - 使用 Rust 构建轻量级跨平台桌面应用
-
 ---
 
 ## 快速开始
@@ -59,6 +54,15 @@ npm run dev
 ```
 
 访问 `http://localhost:5173`
+
+### 云同步配置（Supabase）
+
+在项目根目录创建 `.env.local`：
+
+```
+VITE_SUPABASE_URL=https://xxx.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key
+```
 
 ### 构建生产版本
 
@@ -78,7 +82,7 @@ geek-new-tab/
 │   ├── components.md          # 组件化设计
 │   ├── data-persistence.md    # 数据持久化方案
 │   ├── performance.md         # 性能优化策略
-│   └── tauri-integration.md   # Tauri 集成方案
+│   └── tauri-integration.md   # 历史文档（已弃用）
 │
 ├── prototypeDesign/           # 原型设计 (纯 HTML/CSS/JS)
 │   ├── README.md
@@ -138,27 +142,10 @@ geek-new-tab/
 
 ---
 
-## 页面说明（非 SPA / 多页面网站）
+## 页面说明
 
-本项目采用**多页面架构**,每个页面都是独立的 HTML 文件:
-
-### 主要页面
-
-- **首页**: `/` - 默认展示"搜索"分类
-- **分类页**: `/category/{key}/` - 每个分类都有独立静态页面
-  - 示例: `/category/dev/`, `/category/tools/`
-- **设置页**: `/settings/` - 应用设置
-- **数据页**: `/data/` - 数据管理 (导入/导出)
-- **关于页**: `/about/` - 关于页面
-
-### 兼容旧地址
-
-以下旧地址会自动重定向到新地址:
-
-- `分类页`: `/category.html?id=search` → `/category/search/`
-- `设置页`: `/settings.html` → `/settings/`
-- `数据页`: `/data.html` → `/data/`
-- `关于页`: `/about.html` → `/about/`
+本项目采用**单页应用 (SPA)** 形态，所有功能集中在首页完成：
+- **首页**: `/` - 搜索、分类、网站管理、设置与数据管理
 
 ---
 
@@ -171,7 +158,6 @@ geek-new-tab/
 - [x] 网站管理 (添加/编辑/删除网站)
 - [x] 本地存储 (LocalStorage)
 - [x] Supabase 云同步 (可选)
-- [x] 多页面架构
 - [x] 响应式设计
 
 ### 开发中
@@ -184,11 +170,8 @@ geek-new-tab/
 
 ### 计划中
 
-- [ ] Pinia 状态管理重构
 - [ ] 虚拟滚动 (大列表优化)
 - [ ] Web Worker 搜索
-- [ ] Tauri 桌面应用
-- [ ] 系统托盘 + 全局快捷键
 
 ---
 
