@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geek Tab_</title>
+
+  <!-- Iconify (via jsDelivr) -->
+  <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@3.1.1/dist/iconify.min.js"></script>
+  
+  <!-- Anime.js -->
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  
+  <!-- 样式文件 -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Layers -->
+  <div id="bgLayer"></div>
+  <div id="bgOverlay"></div>
+  <div class="ambient-light"></div>
+  <div class="noise-overlay"></div>
+
+  <div class="container">
+    <header class="header-section">
+      <div id="clock" class="clock">00:00:00</div>
+      <div id="date" class="date">加载中...</div>
+
+      <div class="search-wrapper">
+        <span class="prompt-char">&gt;</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="搜索网站..." autocomplete="off">
+        <div class="shortcut-hint">
+          <span class="key-badge">搜索</span>
+        </div>
+        
+        <div id="commandHelper" class="command-helper">
+          <!-- JS 填充 -->
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <aside class="sidebar">
+        <nav id="navTabs" class="nav-tabs">
+          <!-- JS 填充 -->
+        </nav>
+        
+        <!-- 设置按钮 -->
+        <button id="settingsBtn" class="settings-btn" onclick="openSettings()" title="设置">
+          <span class="iconify" data-icon="mdi:cog"></span>
+          <span style="margin-left: 8px; font-size: 0.85rem;">设置</span>
+        </button>
+      </aside>
+
+      <main class="content-area">
+        <div id="gridContainer" class="grid-container">
+          <!-- JS 填充 -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- 添加内容弹窗 -->
+  <div id="addModal" class="modal-overlay" onclick="handleModalClick(event, 'addModal')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>添加内容</h3>
+        <button class="close-btn" onclick="closeModal('addModal')">×</button>
+      </div>
+      
+      <!-- 标签页头部 -->
+      <div class="settings-tabs">
+        <button class="settings-tab-btn active" onclick="switchAddTab('site')">添加网站</button>
+        <button class="settings-tab-btn" onclick="switchAddTab('category')">添加分类</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- 添加网站 -->
+        <div id="tab-add-site" class="settings-panel active">
+          <div class="input-group">
+            <span class="input-label">标题</span>
+            <input type="text" id="siteTitle" placeholder="例如：GitHub">
+          </div>
+          <div class="input-group">
+            <span class="input-label">链接</span>
+            <input type="text" id="siteUrl" placeholder="https://...">
+          </div>
+          <div class="input-group">
+            <span class="input-label">图标</span>
+            <input type="text" id="siteIcon" placeholder="图标代码 (例如 mdi:web)">
+          </div>
+          <div class="input-group">
+            <span class="input-label">描述</span>
+            <input type="text" id="siteDesc" placeholder="网站描述">
+          </div>
+          <div class="input-group">
+            <span class="input-label">标签</span>
+            <input type="text" id="siteTags" placeholder="用逗号分隔，例如：工具, 设计">
+          </div>
+          <button class="run-btn" onclick="commitNewSite()">> 确认添加</button>
+        </div>
+
+        <!-- 添加分类 -->
+        <div id="tab-add-category" class="settings-panel">
+          <div class="input-group">
+            <span class="input-label">键值</span>
+            <input type="text" id="categoryKey" placeholder="例如：design">
+          </div>
+          <div class="input-group">
+            <span class="input-label">名称</span>
+            <input type="text" id="categoryLabel" placeholder="例如：设计">
+          </div>
+          <button class="run-btn" onclick="commitNewCategory()">> 确认添加</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 设置弹窗 (多标签页) -->
+  <div id="settingsModal" class="modal-overlay" onclick="handleModalClick(event, 'settingsModal')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>系统设置</h3>
+        <button class="close-btn" onclick="closeModal('settingsModal')">×</button>
+      </div>
+      
+      <!-- 标签页头部 -->
+      <div class="settings-tabs">
+        <button class="settings-tab-btn active" onclick="switchSettingTab('appearance')">外观</button>
+        <button class="settings-tab-btn" onclick="switchSettingTab('search')">搜索</button>
+        <button class="settings-tab-btn" onclick="switchSettingTab('general')">通用</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- 标签页 1: 外观 -->
+        <div id="tab-appearance" class="settings-panel active">
+          <div class="setting-group">
+            <label class="setting-label">背景设置</label>
+            <div class="color-presets" style="margin-bottom:8px;">
+               <button class="preset-btn" onclick="setConfig('bgType', 'default')" id="btn-bg-default" style="flex:1">极客默认</button>
+               <button class="preset-btn" onclick="setConfig('bgType', 'unsplash')" id="btn-bg-unsplash" style="flex:1">随机美图</button>
+            </div>
+            <div class="input-group">
+               <span class="input-label">链接</span>
+               <input type="text" id="bgUrlInput" placeholder="图片 URL..." onchange="setConfig('bgValue', this.value); setConfig('bgType', 'url')">
+            </div>
+            <div class="input-group">
+               <span class="input-label">本地</span>
+               <input type="file" accept="image/*" onchange="handleBgUpload(this)">
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <label class="setting-label">遮罩透明度: <span id="opacityVal">50%</span></label>
+            <input type="range" min="0" max="95" value="50" style="width:100%" id="opacitySlider" oninput="updateOpacity(this.value)">
+          </div>
+
+          <div class="setting-group">
+            <label class="setting-label">主题色</label>
+            <div class="color-presets">
+              <div class="color-dot" style="background:#60a5fa" onclick="setTheme('#60a5fa')"></div>
+              <div class="color-dot" style="background:#a78bfa" onclick="setTheme('#a78bfa')"></div>
+              <div class="color-dot" style="background:#34d399" onclick="setTheme('#34d399')"></div>
+              <div class="color-dot" style="background:#fbbf24" onclick="setTheme('#fbbf24')"></div>
+              <div class="color-dot" style="background:#f87171" onclick="setTheme('#f87171')"></div>
+              <input type="color" id="customThemePicker" onchange="setTheme(this.value)" style="width:24px;height:24px;padding:0;border:none;background:none;">
+            </div>
+          </div>
+          
+          <div class="setting-group">
+            <label class="setting-label">文本颜色</label>
+            <div class="input-group">
+               <span class="input-label">十六进制</span>
+               <input type="text" id="textColorInput" placeholder="#e4e4e7" onchange="setTextColor(this.value)">
+               <input type="color" onchange="setTextColor(this.value)" style="width:40px;height:30px;border:none;background:none;padding:0;">
+            </div>
+          </div>
+        </div>
+
+        <!-- 标签页 2: 搜索 -->
+        <div id="tab-search" class="settings-panel">
+          <div class="setting-group">
+            <label class="setting-label">搜索引擎 (快捷键 / 地址)</label>
+            <div id="engineList" class="engine-list">
+              <!-- JS 填充 -->
+            </div>
+          </div>
+          <div class="setting-group" style="border-top:1px solid var(--card-border); padding-top:12px;">
+            <label class="setting-label">添加新引擎</label>
+            <div class="input-group">
+              <span class="input-label">键值</span>
+              <input type="text" id="newEngineKey" placeholder="例如: gt">
+            </div>
+            <div class="input-group">
+              <span class="input-label">名称</span>
+              <input type="text" id="newEngineName" placeholder="例如: 谷歌翻译">
+            </div>
+            <div class="input-group">
+              <span class="input-label">地址</span>
+              <input type="text" id="newEngineUrl" placeholder="https://...?q=">
+            </div>
+            <button class="run-btn" onclick="addEngine()">+ 添加引擎</button>
+          </div>
+        </div>
+
+        <!-- 标签页 3: 通用 -->
+        <div id="tab-general" class="settings-panel">
+          <div class="setting-group">
+            <label class="setting-label">语言 / 区域</label>
+            <div class="color-presets">
+              <button class="preset-btn" onclick="setLocale('zh-CN')" style="flex:1" id="btn-lang-zh">中文 (CN)</button>
+              <button class="preset-btn" onclick="setLocale('en-US')" style="flex:1" id="btn-lang-en">英文 (US)</button>
+            </div>
+          </div>
+          
+          <div class="setting-group">
+            <label class="setting-label">数据管理</label>
+            <button class="run-btn" style="border-color:#34d399; color:#34d399; background:rgba(52, 211, 153, 0.1);" onclick="downloadConfig()">备份配置 (JSON)</button>
+            <button class="danger-btn" onclick="resetAll()">重置所有数据</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript 文件 -->
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
