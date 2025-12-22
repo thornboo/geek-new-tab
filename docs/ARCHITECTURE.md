@@ -82,6 +82,8 @@ Geek New Tab 是一个面向程序员和极客的浏览器新标签页应用，�
 - 主题定制（颜色/背景/透明度）
 - 数据管理（备份/导入/导出/重置）
 - 快捷键支持（/聚焦搜索、Ctrl+S设置、Ctrl+N添加等）
+- 书签导入/导出（Chrome HTML 书签）
+- AI 批量生成（标题/描述/标签）
 
 **原型的优点**
 - 功能完整，交互流畅
@@ -164,8 +166,8 @@ Geek New Tab 是一个面向程序员和极客的浏览器新标签页应用，�
 │   └── Search Store (搜索状态)
 │
 ├── Data Layer (数据层)
-│   ├── LocalStorage (本地缓存)
-│   └── Supabase (云端同步)
+│   ├── LocalStorage (本地缓存，含用户设置)
+│   └── Supabase (云端同步，仅分类/站点)
 │
 └── Browser Runtime
     ├── Web APIs
@@ -268,8 +270,8 @@ geek-new-tab/
 
 **三层架构**
 - Pinia Store：内存中的响应式状态
-- LocalStorage：本地缓存，离线优先
-- Supabase：云端存储，可选同步
+- LocalStorage：本地缓存，离线优先（用户设置仅本地）
+- Supabase：云端存储，可选同步（仅分类/站点）
 
 **同步策略**
 - 离线优先：本地操作立即生效
@@ -286,6 +288,23 @@ geek-new-tab/
 - Tree Shaking：移除未使用代码
 - 懒加载：图片、图标按需加载
 - 防抖节流：搜索输入优化
+
+### 5. AI 批量增强（规划）
+
+通过 Supabase Edge Function 代理调用 DeepSeek API，为站点批量生成标题、描述与标签：
+- 前端发起批量生成任务（不直接暴露 API Key）
+- Edge Function 读取环境变量中的 DeepSeek Key（服务端保管）
+- Edge Function 拉取元信息（可选）→ 调用 DeepSeek
+- 返回建议结果供用户确认与批量应用
+- 覆盖策略：允许覆盖已有标题/描述/标签（仍需用户确认）
+
+### 6. 书签导入/导出（规划）
+
+纯 Web 模式下通过 HTML 书签文件导入/导出：
+- 导入：文件夹 → 分类（支持多级树与展开/收起）
+- 导入：同名网址不去重，导入后合并（不清空现有数据）
+- 分类层级：使用 `parent_key` 字段维护父子关系
+- 导出：卡片数据 → 书签 HTML
 
 ---
 

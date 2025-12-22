@@ -159,30 +159,29 @@ geek-new-tab/
 - [x] 本地存储 (LocalStorage)
 - [x] Supabase 云同步 (可选)
 - [x] 响应式设计
+- [x] 拖拽排序
 
 ### 开发中
 
 - [ ] 访问统计与热门网站
 - [ ] 高级搜索 (支持标签、描述)
-- [ ] 拖拽排序
 - [ ] 主题切换 (暗色/亮色)
 - [ ] 快捷键增强
+- [ ] 书签导入/导出 (Chrome HTML 书签，文件夹映射分类，支持多级树与合并导入)
 
 ### 计划中
 
 - [ ] 虚拟滚动 (大列表优化)
 - [ ] Web Worker 搜索
+- [ ] AI 批量生成标签/描述/标题 (DeepSeek，经 Edge Function 代理)
 
 ---
 
 ## 开发指南
 
-### 添加新页面
+### 页面结构
 
-1. 在 `src/pages/` 创建 Vue 组件
-2. 在 `src/entries/` 创建入口文件
-3. 在根目录创建对应的 HTML 文件
-4. 在 `vite.config.ts` 中配置多页面入口
+项目采用单页形态，核心页面与弹窗集中在 `src/App.vue`。
 
 ### 状态管理
 
@@ -245,7 +244,7 @@ CREATE POLICY "Enable all for public" ON sites
 
 ### 3. 配置环境变量
 
-在应用设置页面填入:
+在项目根目录创建 `.env.local`:
 
 - **Supabase URL**: `https://your-project.supabase.co`
 - **Supabase Key**: `your-anon-key`

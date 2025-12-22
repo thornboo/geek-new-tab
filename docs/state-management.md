@@ -109,6 +109,8 @@ function saveDb() {
 }
 ```
 
+> 说明：`engines` 为原型阶段设计，当前版本仅保留站内搜索，不再提供外部搜索引擎配置。
+
 ### 配置数据结构
 
 ```javascript
@@ -433,7 +435,7 @@ export const useSiteStore = defineStore('site', () => {
 ### 2. Settings Store（用户设置）
 
 **职责：**
-- 管理应用设置（主题/布局/Supabase 配置）
+- 管理应用设置（主题/布局/快捷键，仅本地）
 - 提供设置的读写接口
 - 应用主题到 DOM
 
@@ -447,11 +449,6 @@ import { ref, computed } from 'vue'
 export const useSettingsStore = defineStore('settings', () => {
   // ========== 状态 ==========
   const settings = ref<AppSettings>({
-    supabase: {
-      url: '',
-      key: '',
-      enabled: false
-    },
     appearance: {
       theme: 'dark',
       layout: 'grid',
@@ -460,15 +457,6 @@ export const useSettingsStore = defineStore('settings', () => {
       bgType: 'default',
       bgValue: '',
       overlayOpacity: 50
-    },
-    search: {
-      engines: {
-        g: { name: '谷歌', url: 'https://www.google.com/search?q=' },
-        b: { name: '必应', url: 'https://www.bing.com/search?q=' },
-        bd: { name: '百度', url: 'https://www.baidu.com/s?wd=' },
-        gh: { name: 'GitHub', url: 'https://github.com/search?q=' }
-      },
-      defaultEngine: 'g'
     },
     shortcuts: {
       search: '/',
@@ -493,14 +481,6 @@ export const useSettingsStore = defineStore('settings', () => {
   })
 
   /**
-   * 是否启用云同步
-   */
-  const hasCloudSync = computed(() => {
-    const { url, key, enabled } = settings.value.supabase
-    return enabled && Boolean(url) && Boolean(key)
-  })
-
-  /**
    * CSS 变量对象
    */
   const cssVariables = computed(() => {
@@ -522,16 +502,6 @@ export const useSettingsStore = defineStore('settings', () => {
   }
 
   /**
-   * 更新 Supabase 配置
-   */
-  function updateSupabaseConfig(config: Partial<SupabaseConfig>) {
-    settings.value.supabase = {
-      ...settings.value.supabase,
-      ...config
-    }
-  }
-
-  /**
    * 更新外观设置
    */
   function updateAppearance(config: Partial<AppearanceConfig>) {
@@ -539,20 +509,6 @@ export const useSettingsStore = defineStore('settings', () => {
       ...settings.value.appearance,
       ...config
     }
-  }
-
-  /**
-   * 添加搜索引擎
-   */
-  function addSearchEngine(key: string, name: string, url: string) {
-    settings.value.search.engines[key] = { name, url }
-  }
-
-  /**
-   * 删除搜索引擎
-   */
-  function removeSearchEngine(key: string) {
-    delete settings.value.search.engines[key]
   }
 
   /**
@@ -581,13 +537,9 @@ export const useSettingsStore = defineStore('settings', () => {
   return {
     settings,
     isDarkMode,
-    hasCloudSync,
     cssVariables,
     updateSettings,
-    updateSupabaseConfig,
     updateAppearance,
-    addSearchEngine,
-    removeSearchEngine,
     resetToDefault,
     applyTheme
   }
@@ -616,7 +568,6 @@ function isObject(val: unknown): val is Record<string, any> {
 function getDefaultSettings(): AppSettings {
   // 返回默认设置
   return {
-    supabase: { url: '', key: '', enabled: false },
     appearance: {
       theme: 'dark',
       layout: 'grid',
@@ -625,12 +576,6 @@ function getDefaultSettings(): AppSettings {
       bgType: 'default',
       bgValue: '',
       overlayOpacity: 50
-    },
-    search: {
-      engines: {
-        g: { name: '谷歌', url: 'https://www.google.com/search?q=' }
-      },
-      defaultEngine: 'g'
     },
     shortcuts: {
       search: '/',
@@ -888,13 +833,8 @@ export interface Category {
   label: string
   icon?: string
   color?: string
+  parentKey?: string | null
   order?: number
-}
-
-export interface SupabaseConfig {
-  url: string
-  key: string
-  enabled: boolean
 }
 
 export interface AppearanceConfig {
@@ -907,17 +847,6 @@ export interface AppearanceConfig {
   overlayOpacity?: number
 }
 
-export interface SearchEngine {
-  name: string
-  url: string
-  icon?: string
-}
-
-export interface SearchConfig {
-  engines: Record<string, SearchEngine>
-  defaultEngine: string
-}
-
 export interface ShortcutsConfig {
   search?: string
   settings?: string
@@ -927,9 +856,7 @@ export interface ShortcutsConfig {
 }
 
 export interface AppSettings {
-  supabase: SupabaseConfig
   appearance: AppearanceConfig
-  search: SearchConfig
   shortcuts: ShortcutsConfig
 }
 

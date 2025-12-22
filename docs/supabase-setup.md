@@ -130,36 +130,25 @@ CREATE TABLE categories (
   label TEXT NOT NULL,                  -- 分类显示名称
   icon TEXT,                            -- 分类图标
   color TEXT,                           -- 分类颜色
+  parent_key TEXT,                      -- 父级分类 key，顶级为 NULL
   "order" INTEGER DEFAULT 0,            -- 排序顺序
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- 父级索引（用于构建树）
+CREATE INDEX categories_parent_key_idx ON categories(parent_key);
+
 -- 插入默认分类
-INSERT INTO categories (key, label, icon, color, "order") VALUES
-  ('dev', '开发', 'mdi:code-tags', '#60a5fa', 1),
-  ('tools', '工具', 'mdi:tools', '#34d399', 2),
-  ('design', '设计', 'mdi:palette', '#f472b6', 3),
-  ('ai', 'AI', 'mdi:robot', '#a78bfa', 4);
+INSERT INTO categories (key, label, icon, color, parent_key, "order") VALUES
+  ('dev', '开发', 'mdi:code-tags', '#60a5fa', NULL, 1),
+  ('tools', '工具', 'mdi:tools', '#34d399', NULL, 2),
+  ('design', '设计', 'mdi:palette', '#f472b6', NULL, 3),
+  ('ai', 'AI', 'mdi:robot', '#a78bfa', NULL, 4);
 ```
 
-#### 3. user_settings 表（用户设置，可选）
+#### 3. user_settings 表（不需要）
 
-```sql
--- 创建 user_settings 表（可选，也可以只用 LocalStorage）
-CREATE TABLE user_settings (
-  id BIGSERIAL PRIMARY KEY,
-  user_id TEXT UNIQUE,                  -- 用户标识（匿名用户可用设备 ID）
-  settings JSONB NOT NULL,              -- 设置 JSON 数据
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 更新时间触发器
-CREATE TRIGGER update_user_settings_updated_at
-  BEFORE UPDATE ON user_settings
-  FOR EACH ROW
-  EXECUTE FUNCTION update_updated_at_column();
-```
+本项目**不保存用户设置到云端**，设置仅存于 LocalStorage，因此无需创建 `user_settings` 表。
 
 ### 执行 SQL
 
@@ -174,6 +163,8 @@ CREATE TRIGGER update_user_settings_updated_at
 ```sql
 ALTER TABLE sites ADD COLUMN IF NOT EXISTS sort_order INTEGER DEFAULT 0;
 CREATE INDEX IF NOT EXISTS sites_sort_order_idx ON sites(sort_order);
+ALTER TABLE categories ADD COLUMN IF NOT EXISTS parent_key TEXT;
+CREATE INDEX IF NOT EXISTS categories_parent_key_idx ON categories(parent_key);
 ```
 
 ---
@@ -498,6 +489,7 @@ export async function loadCategoriesFromSupabase(): Promise<Category[]> {
     label: cat.label,
     icon: cat.icon || undefined,
     color: cat.color || undefined,
+    parentKey: cat.parent_key || undefined,
     order: cat.order
   }))
 }
@@ -610,6 +602,22 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_ANON_KEY
 ```
+
+---
+
+## Edge Function（AI 代理）
+
+**Edge Function 是什么：** Supabase 提供的 Serverless 函数运行环境，可在云端执行自定义逻辑并向前端暴露 API。
+
+为 AI 批量生成能力保密 DeepSeek Key，建议通过 Edge Function 代理调用：
+
+- **前端**：只调用 Edge Function，不直接暴露 Key
+- **函数环境变量**：配置 `DEEPSEEK_API_KEY`（Key 不放在设置里）
+- **可选**：在函数内抓取网页元信息（title/description）再生成内容
+
+结论：**DeepSeek Key 不应出现在设置页或前端代码**，由 Edge Function 持有并代理调用。
+
+说明：该功能仅为规划，后续实现时会补充具体函数代码与部署步骤。
 
 ---
 
