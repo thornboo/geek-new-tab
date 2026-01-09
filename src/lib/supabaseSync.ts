@@ -15,6 +15,7 @@ export interface Site {
   visitCount?: number
   lastVisit?: string
   sortOrder?: number
+  isCustom?: boolean
 }
 
 export interface Category {
@@ -263,5 +264,24 @@ export async function clearAllDataInSupabase(): Promise<void> {
   if (categoryError) {
     console.error('清空分类失败:', categoryError)
     throw categoryError
+  }
+}
+
+// 兼容旧 API 的别名
+export const loadSitesFromSupabase = loadDbFromSupabase
+export const clearAllSitesInSupabase = clearAllDataInSupabase
+
+export interface GroupedSites {
+  [categoryKey: string]: Site[]
+}
+
+export async function batchImportToSupabase(sites: GroupedSites): Promise<void> {
+  const client = await getSupabaseClient()
+  if (!client) return
+
+  for (const [categoryKey, siteList] of Object.entries(sites)) {
+    for (const site of siteList) {
+      await addSiteToSupabase(categoryKey, site)
+    }
   }
 }

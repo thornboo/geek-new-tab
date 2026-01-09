@@ -1,259 +1,143 @@
 # Geek New Tab
 
-极客导航 - 程序员的导航网站
+<p align="center">
+  <img src="public/logo.svg" alt="Geek New Tab Logo" width="120" height="120">
+</p>
 
-## 完整架构文档
+<p align="center">
+  <strong>极客导航 - 程序员的新标签页</strong>
+</p>
 
-**重要:** 项目已完成完整的架构设计文档,请在开发前务必阅读:
-
-- **[架构总览 (ARCHITECTURE.md)](./docs/ARCHITECTURE.md)** - 项目整体架构设计
-- **[状态管理设计](./docs/state-management.md)** - Pinia Store 模块设计
-- **[组件化设计](./docs/components.md)** - Vue 组件架构与最佳实践
-- **[数据持久化方案](./docs/data-persistence.md)** - 本地存储 + 云端同步策略
-- **[Supabase 配置指南](./docs/supabase-setup.md)** - 云数据库完整配置方案
-- **[性能优化策略](./docs/performance.md)** - 全面的性能优化方案
+<p align="center">
+  <a href="#功能特性">功能特性</a> •
+  <a href="#快速开始">快速开始</a> •
+  <a href="#技术栈">技术栈</a> •
+  <a href="#截图预览">截图预览</a> •
+  <a href="./docs/Development.md">开发文档</a>
+</p>
 
 ---
 
-## 技术栈
+## 简介
 
-### 核心框架
+**Geek New Tab** 是一款专为程序员设计的浏览器新标签页应用，采用极客风格的 Matrix 主题设计，提供高效的网站导航和书签管理功能。
 
-- **Vue 3** - 渐进式 JavaScript 框架 (Composition API)
-- **Vite 5** - 下一代前端构建工具
-- **Pinia** - Vue 3 官方推荐状态管理库 (计划集成)
-- **TypeScript** - JavaScript 的超集,提供类型系统
+- 🎨 **极客风格** - 黑绿配色，终端美学，Matrix 主题
+- 🚀 **离线优先** - 本地存储，无需网络即可使用
+- ☁️ **云端同步** - 可选 Supabase 云同步，跨设备数据同步
+- 📁 **书签导入** - 支持 Chrome/Edge/Firefox 书签 HTML 导入
+- ⌨️ **快捷键** - 全键盘操作，提升效率
 
-### UI & 样式
+---
 
-- **UnoCSS** - 原子化 CSS 引擎
-- **@iconify/vue** - 统一的图标框架
+## 功能特性
 
-### 后端 & 存储
+### 核心功能
 
-- **Supabase** - 开源 Firebase 替代方案
-  - PostgreSQL 数据库
-  - 实时订阅
-  - 认证系统
-- **LocalStorage** - 浏览器本地存储
+| 功能 | 说明 |
+|------|------|
+| **分类管理** | 创建、编辑、删除分类，支持拖拽排序 |
+| **网站管理** | 添加、编辑、删除网站，支持图标、描述、标签 |
+| **全局搜索** | 快速搜索网站，支持名称、描述、标签匹配 |
+| **书签导入** | 导入 Chrome/Edge/Firefox 书签 HTML，文件夹自动转换为分类 |
+| **书签导出** | 导出为标准书签 HTML 格式，可导入浏览器 |
+| **数据备份** | JSON 格式备份/恢复，支持云端同步 |
+
+### 个性化设置
+
+- 🎨 主题色自定义
+- 🖼️ 背景图片（默认/Unsplash/自定义 URL）
+- 🌐 语言切换（中文/英文）
+- 📊 遮罩透明度调节
+
+### 快捷键
+
+| 快捷键 | 功能 |
+|--------|------|
+| `/` | 聚焦搜索框 |
+| `Esc` | 关闭弹窗/清空搜索 |
+| `Ctrl/⌘ + S` | 打开设置 |
+| `Ctrl/⌘ + N` | 添加网站 |
+| `Ctrl/⌘ + ←/→` | 切换分类 |
 
 ---
 
 ## 快速开始
 
-### 安装依赖
+### 安装
 
 ```bash
+# 克隆项目
+git clone https://github.com/your-username/geek-new-tab.git
+cd geek-new-tab
+
+# 安装依赖
 npm install
-```
 
-### 启动开发服务器
-
-```bash
+# 启动开发服务器
 npm run dev
 ```
 
-访问 `http://localhost:5173`
+访问 `http://localhost:8081`
 
-### 云同步配置（Supabase）
-
-在项目根目录创建 `.env.local`：
-
-```
-VITE_SUPABASE_URL=https://xxx.supabase.co
-VITE_SUPABASE_ANON_KEY=your_anon_key
-```
-
-### 构建生产版本
+### 构建
 
 ```bash
+# 构建生产版本
 npm run build
+
+# 预览构建结果
+npm run preview
 ```
 
----
+### 云同步配置（可选）
 
-## 项目结构
+如需启用 Supabase 云同步，在项目根目录创建 `.env.local`：
 
-```
-geek-new-tab/
-├── docs/                      # 架构设计文档
-│   ├── ARCHITECTURE.md        # 架构总览
-│   ├── state-management.md    # 状态管理设计
-│   ├── components.md          # 组件化设计
-│   ├── data-persistence.md    # 数据持久化方案
-│   ├── performance.md         # 性能优化策略
-│   └── tauri-integration.md   # 历史文档（已弃用）
-│
-├── prototypeDesign/           # 原型设计 (纯 HTML/CSS/JS)
-│   ├── README.md
-│   ├── ARCHITECTURE.md
-│   ├── index.html
-│   ├── app.js
-│   ├── config.js
-│   └── styles.css
-│
-├── src/                       # 源代码
-│   ├── assets/                # 静态资源
-│   │   └── icons/             # 图标资源
-│   │
-│   ├── components/            # Vue 组件
-│   │   ├── layout/            # 布局组件
-│   │   ├── ui/                # UI 组件
-│   │   ├── modals/            # 弹窗组件
-│   │   └── widgets/           # 复合组件
-│   │
-│   ├── composables/           # 组合式函数
-│   │   ├── useNavigation.js
-│   │   ├── useSettings.js
-│   │   ├── useSiteData.ts
-│   │   └── useSiteManager.ts
-│   │
-│   ├── data/                  # 静态数据
-│   │   └── sites.js           # 默认网站数据
-│   │
-│   ├── entries/               # 多页面入口
-│   │   ├── bootstrap.js
-│   │   ├── category.js
-│   │   ├── settings.js
-│   │   ├── data.js
-│   │   └── about.js
-│   │
-│   ├── lib/                   # 工具库
-│   │   ├── storage.ts         # LocalStorage 管理
-│   │   ├── supabase.ts        # Supabase 客户端
-│   │   └── supabaseSync.ts    # Supabase 同步逻辑
-│   │
-│   ├── pages/                 # 页面组件
-│   │   ├── HomePage.vue
-│   │   ├── CategoryPage.vue
-│   │   ├── SettingsPage.vue
-│   │   ├── DataPage.vue
-│   │   └── AboutPage.vue
-│   │
-│   └── styles/                # 全局样式
-│       └── main.css
-│
-├── index.html                 # 主 HTML 入口
-├── vite.config.ts             # Vite 配置
-├── uno.config.ts              # UnoCSS 配置
-├── package.json
-└── README.md
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
 ```
 
----
-
-## 页面说明
-
-本项目采用**单页应用 (SPA)** 形态，所有功能集中在首页完成：
-- **首页**: `/` - 搜索、分类、网站管理、设置与数据管理
+详细配置请参考 [Supabase 配置指南](./docs/supabase-setup.md)
 
 ---
 
-## 核心功能
+## 技术栈
 
-### 已实现
-
-- [x] 基础布局 (侧边栏 + 主内容区)
-- [x] 分类管理 (创建/编辑/删除分类)
-- [x] 网站管理 (添加/编辑/删除网站)
-- [x] 本地存储 (LocalStorage)
-- [x] Supabase 云同步 (可选)
-- [x] 响应式设计
-- [x] 拖拽排序
-
-### 开发中
-
-- [ ] 访问统计与热门网站
-- [ ] 高级搜索 (支持标签、描述)
-- [ ] 主题切换 (暗色/亮色)
-- [ ] 快捷键增强
-- [ ] 书签导入/导出 (Chrome HTML 书签，文件夹映射分类，支持多级树与合并导入)
-
-### 计划中
-
-- [ ] 虚拟滚动 (大列表优化)
-- [ ] Web Worker 搜索
-- [ ] AI 批量生成标签/描述/标题 (DeepSeek，经 Edge Function 代理)
+| 类别 | 技术 |
+|------|------|
+| **框架** | Vue 3 (Composition API) |
+| **构建** | Vite 5 |
+| **状态管理** | Pinia |
+| **UI 组件** | shadcn-vue + Reka UI |
+| **样式** | Tailwind CSS 4 + UnoCSS |
+| **图标** | Lucide Icons + Iconify |
+| **云服务** | Supabase (PostgreSQL + Realtime) |
+| **类型** | TypeScript |
 
 ---
 
-## 开发指南
+## 截图预览
 
-### 页面结构
-
-项目采用单页形态，核心页面与弹窗集中在 `src/App.vue`。
-
-### 状态管理
-
-当前使用 **Composables** 模式,计划迁移到 **Pinia**。
-
-详见: [状态管理设计文档](./docs/state-management.md)
-
-### 组件开发
-
-遵循 **单一职责原则**,组件分为三类:
-
-- **纯展示组件** (UI) - 只负责渲染
-- **容器组件** (Container) - 负责数据和逻辑
-- **复合组件** (Composite) - 组合多个子组件
-
-详见: [组件化设计文档](./docs/components.md)
+> 截图待添加
 
 ---
 
-## 原型设计
+## 文档
 
-项目包含纯 HTML/CSS/JS 的原型设计,位于 `prototypeDesign/` 目录:
-
-- **查看原型**: 直接打开 `prototypeDesign/index.html`
-- **原型文档**: [prototypeDesign/README.md](./prototypeDesign/README.md)
-
-原型设计用于快速验证功能和交互,正式项目基于原型重构为 Vue 3 架构。
-
----
-
-## 配置 Supabase (可选)
-
-### 1. 创建 Supabase 项目
-
-访问 [Supabase](https://supabase.com),创建新项目。
-
-### 2. 创建数据表
-
-执行以下 SQL:
-
-```sql
-CREATE TABLE sites (
-  id BIGSERIAL PRIMARY KEY,
-  category TEXT NOT NULL,
-  name TEXT NOT NULL,
-  url TEXT NOT NULL,
-  description TEXT,
-  icon TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 启用 Row Level Security
-ALTER TABLE sites ENABLE ROW LEVEL SECURITY;
-
--- 允许所有操作 (开发环境)
-CREATE POLICY "Enable all for public" ON sites
-  FOR ALL USING (true);
-```
-
-### 3. 配置环境变量
-
-在项目根目录创建 `.env.local`:
-
-- **Supabase URL**: `https://your-project.supabase.co`
-- **Supabase Key**: `your-anon-key`
+- 📖 [开发文档](./docs/Development.md) - 开发环境、项目结构、代码规范
+- 🏗️ [架构设计](./docs/ARCHITECTURE.md) - 整体架构设计
+- 🗃️ [状态管理](./docs/state-management.md) - Pinia Store 设计
+- 🧩 [组件设计](./docs/components.md) - Vue 组件架构
+- 💾 [数据持久化](./docs/data-persistence.md) - 存储与同步策略
+- ☁️ [Supabase 配置](./docs/supabase-setup.md) - 云数据库配置
 
 ---
 
-## 贡献指南
+## 贡献
 
-### 开发流程
+欢迎提交 Issue 和 Pull Request！
 
 1. Fork 本仓库
 2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
@@ -261,19 +145,11 @@ CREATE POLICY "Enable all for public" ON sites
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 创建 Pull Request
 
-### 代码规范
-
-- **TypeScript** - 优先使用 TypeScript
-- **组件命名** - PascalCase (如 `SiteCard.vue`)
-- **函数命名** - camelCase (如 `getSitesByCategory`)
-- **常量命名** - UPPER_SNAKE_CASE (如 `DEFAULT_SETTINGS`)
-- **代码格式化** - 使用 Prettier (配置见 `.prettierrc`)
-
 ---
 
 ## 许可证
 
-MIT License
+[MIT License](./LICENSE)
 
 ---
 
@@ -281,17 +157,13 @@ MIT License
 
 - [Vue.js](https://vuejs.org/) - 渐进式 JavaScript 框架
 - [Vite](https://vitejs.dev/) - 下一代前端构建工具
+- [shadcn-vue](https://www.shadcn-vue.com/) - Vue 版 shadcn/ui 组件库
 - [Supabase](https://supabase.com/) - 开源 Firebase 替代方案
-- [UnoCSS](https://unocss.dev/) - 即时按需原子化 CSS 引擎
+- [Tailwind CSS](https://tailwindcss.com/) - 原子化 CSS 框架
 - [Iconify](https://iconify.design/) - 统一的图标框架
 
 ---
 
-## 联系方式
-
-- **Issues**: [GitHub Issues](https://github.com/your-username/geek-new-tab/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-username/geek-new-tab/discussions)
-
----
-
-**Happy Coding!**
+<p align="center">
+  <strong>Happy Coding! 🚀</strong>
+</p>

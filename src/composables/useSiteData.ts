@@ -27,7 +27,14 @@ async function loadCustomSites(): Promise<void> {
   loading.value = true
   try {
     const data = await loadSitesFromSupabase()
-    customSites.value = data
+    if (data?.categories) {
+      // 将分类数据转换为 GroupedSites 格式
+      const grouped: GroupedSites = {}
+      data.categories.forEach((cat) => {
+        grouped[cat.key] = cat.sites || []
+      })
+      customSites.value = grouped
+    }
     initialized.value = true
   } catch (e) {
     console.error('Failed to load custom sites:', e)
